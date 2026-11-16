@@ -4,8 +4,8 @@
     {
       "name": "harbor",
       "file": "harbor.zip",
-      "size": 3358,
-      "sha256": "53ac5d5feb8b1c923942a51196b5c0dddaa871dc86b810e291b881d283d2691a",
+      "size": 3359,
+      "sha256": "a872121988f5016577a176eabe1d3c1f6f24253a1b3e51b57fba155deea6c782",
       "title": "Harbor",
       "version": "1.0.0",
       "author": "The Flare documentation",
