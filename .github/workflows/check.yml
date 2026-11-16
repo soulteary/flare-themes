@@ -1,0 +1,56 @@
+name: Check themes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # The commit of Flare the themes are checked against. A theme is read as
+  # this source reads it, so the commit is raised when a theme relies on a
+  # later one.
+  FLARE_REF: 0dbc84fbf1881fe4861816c45144357f9954f44e
+
+jobs:
+  themes:
+    name: Themes and index
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Fetch the source of Flare
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: soulteary/flare
+          ref: ${{ env.FLARE_REF }}
+          path: .flare
+          persist-credentials: false
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: .flare/go.mod
+          cache: false
+
+      - name: Build the tool
+        run: go -C .flare build -o "$RUNNER_TEMP/themecheck" ./tools/themecheck
+
+      # Every entry of the directory is given to the tool, so that a file
+      # that is no theme fails the check instead of being passed over.
+      - name: Check the themes
+        run: |
+          "$RUNNER_TEMP/themecheck" themes/*
+
+      - name: Compare the index
+        run: |
+          "$RUNNER_TEMP/themecheck" -index themes/* > "$RUNNER_TEMP/index.json"
+          diff -u index.json "$RUNNER_TEMP/index.json"
