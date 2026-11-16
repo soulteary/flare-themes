@@ -1,0 +1,23 @@
+{
+  "format": 1,
+  "themes": [
+    {
+      "name": "harbor",
+      "file": "harbor.zip",
+      "size": 3359,
+      "sha256": "a872121988f5016577a176eabe1d3c1f6f24253a1b3e51b57fba155deea6c782",
+      "title": "Harbor",
+      "version": "1.0.0",
+      "author": "The Flare documentation",
+      "license": "MIT",
+      "stylesheet": true,
+      "assets": 0,
+      "templates": [
+        "home.html",
+        "app.html",
+        "bookmark.html",
+        "group.html"
+      ]
+    }
+  ]
+}
